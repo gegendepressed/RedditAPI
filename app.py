@@ -29,7 +29,7 @@ reddit = praw.Reddit(
 )
 
 @app.get("/{subreddit}" , status_code=201)
-def read_item(subreddit: str, type: str = Query("random", enum=["hot", "top_week", "top_month", "top_year", "random"])):
+def fetchposts(subreddit: str, type: str = Query("random", enum=["hot", "top_week", "top_month", "top_year", "random"])):
     try:
         if type == "hot":
           submissions = list(reddit.subreddit(subreddit).hot(limit=100))
@@ -45,7 +45,7 @@ def read_item(subreddit: str, type: str = Query("random", enum=["hot", "top_week
           return {
             "title": submission.title,
             "description": submission.selftext,
-            "url": submission.url,
+            "url": submission.shortlink,
             "date" : submission_date,
           }
         submission = random.choice(submissions)
@@ -53,7 +53,7 @@ def read_item(subreddit: str, type: str = Query("random", enum=["hot", "top_week
         return {
             "title": submission.title,
             "description": submission.selftext,
-            "url": submission.url,
+            "url": submission.shortlink,
             "date" : submission_date,
           }
 
